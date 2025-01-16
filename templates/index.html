@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brasfertil & Instagram</title>
+    <!-- Link para o Google Fonts com uma fonte cursiva (para simular a fonte da logo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <!-- Link para o Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Corpo da página */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #ffffff;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Título */
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Aplica a cor preta e a fonte padrão à palavra "Brasfertil no" */
+        .brasfertil-text {
+            color: #000000;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+        }
+
+        /* Estilo para o ícone e o texto do título */
+        h1 img {
+            width: 40px; /* Ajuste o tamanho da logo conforme necessário */
+            height: auto;
+        }
+
+        /* Aplica a fonte cursiva à palavra Instagram */
+        .instagram-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 36px;
+            color: #000000;
+        }
+
+        /* Container da imagem */
+        .image-container {
+            width: 80%;
+            max-width: 800px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            position: absolute;
+        }
+
+        .image-container img.visible {
+            opacity: 1;
+        }
+
+        /* Informações */
+        .image-info {
+            width: 80%;
+            max-width: 800px;
+            margin: 0 auto;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            color: #333;
+            transition: all 1s ease-in-out;
+        }
+
+        .image-info.visible {
+            display: flex;
+        }
+
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 10px;
+        }
+
+        .icon {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .icon i {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .icon span {
+            font-size: 20px;
+        }
+
+        .caption {
+            width: 100%;
+            text-align: justify;
+            font-size: 16px;
+            font-style: italic;
+            font-family: 'Poppins', sans-serif;
+            color: #555;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        <!-- Texto "Brasfertil no" com a classe de cor preta e fonte padrão -->
+        <span class="brasfertil-text">Brasfertil no</span>
+        <!-- Logo do Instagram à esquerda -->
+        <img src="{{ url_for('static', filename='Images/transferir.png') }}" alt="Logo do Instagram">
+        <!-- Nome do Instagram com fonte cursiva -->
+        <span class="instagram-text">Instagram</span>
+    </h1>
+
+    <div class="image-container">
+        {% if image_data %}
+            {% for image in image_data %}
+                <img src="{{ image.url }}" alt="Imagem do Instagram">
+            {% endfor %}
+        {% else %}
+            <p>Sem imagens para exibir no momento.</p>
+        {% endif %}
+    </div>
+
+    <div class="image-info-container">
+        {% if image_data %}
+            {% for image in image_data %}
+                <div class="image-info">
+                    <div class="icon-container">
+                        <div class="icon">
+                            <i class="far fa-heart"></i>
+                            <span>{{ image.likes }}</span>
+                        </div>
+                        <div class="icon">
+                            <i class="far fa-comment"></i>
+                            <span>{{ image.comments }}</span>
+                        </div>
+                    </div>
+                    <div class="caption">{{ image.caption }}</div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        const images = document.querySelectorAll('.image-container img');
+        const imageInfos = document.querySelectorAll('.image-info');
+
+        function showNextImage() {
+            images[currentIndex].classList.remove('visible');
+            imageInfos[currentIndex].classList.remove('visible');
+
+            currentIndex = (currentIndex + 1) % images.length;
+
+            images[currentIndex].classList.add('visible');
+            imageInfos[currentIndex].classList.add('visible');
+        }
+
+        if (images.length > 0) {
+            images[currentIndex].classList.add('visible');
+            imageInfos[currentIndex].classList.add('visible');
+            setInterval(showNextImage, 5000);
+        }
+    </script>
+</body>
+</html>
